@@ -1,0 +1,22 @@
+{
+  "name": "normanda-server",
+  "version": "1.0.0",
+  "description": "Server for Normanda Unity Game And Companion App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Vergari & Nuno Teixeira",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.6",
+    "path": "^0.12.7",
+    "shortid": "^2.2.16",
+    "socket.io": "^3.0.3"
+  }
+}
