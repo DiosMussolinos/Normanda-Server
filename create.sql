@@ -34,6 +34,7 @@ CREATE TABLE war_store(
     item_rarity 	INT,
     item_damage 	INT,
     item_defense 	INT,
+    item_available 	BOOL,
     PRIMARY KEY (item_id)
 );
 
