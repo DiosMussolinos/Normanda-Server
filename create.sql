@@ -100,7 +100,7 @@ IF @playerLevel = 1 THEN
 
 ELSE
 
-	SET @ReqEXP = 10 + (10 * @playerLevel) + (10 * (@playerLevel - 1)); ##FAZER NOVA
+	SET @ReqEXP = 10 + (3 * @playerLevel) + (3 * (@playerLevel - 1)); 
 
 END IF;
 
