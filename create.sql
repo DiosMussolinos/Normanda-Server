@@ -58,6 +58,7 @@ CREATE TABLE inventory(
     item_name 	VARCHAR (255),
     item_amount INT,
     item_rarity INT,
+    item_available BOOL,
     FOREIGN KEY (user_id) REFERENCES player_info(user_id),
     FOREIGN KEY (item_id) REFERENCES war_store(item_id),
     FOREIGN KEY (item_id) REFERENCES bar_store(item_id)  
