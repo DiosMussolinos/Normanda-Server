@@ -1,33 +1,13 @@
-
-//__GET SOME STUFF__\\
+//Importing libs\\
+//const http = require('http');
+const http = require('http');
 const express = require('express');
 const app = express();
-const mysql = require('mysql2');
-const path = require('path')
+const path = require('path');
 const bodyParser = require('body-parser');
 
-//__Variables__\\
-    //Ports
-    const port = 3000;
-    //Logic Drafts
-    //const drafts = require(path.join(__dirname, "User_Pattern", "PatternsForUsers.js"))
-    
-    //Password for connections
-    //const settings = require(path.join(__dirname, "settings.json"));
-
-const connectMysql = () => {
-
-    console.log("CONNECTED!");
-
-    app.listen(port, () => {
-        console.log(`Server connected and listening in${port}`);
-    })
-
-}
-
-app.use(bodyParser.urlencoded({ extended: false}));
-
-app.use(bodyParser.json());
+////////////////////CODE FOR CONNECTION TO DATABASE\\\\\\\\\\\\\\\\\\\\\\
+const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -37,12 +17,32 @@ const connection = mysql.createConnection({
 
 })
 
-connection.connect((err) =>{
-
-    if(err){
+connection.connect((err)=>{
+      
+    if (err){
         console.log(err);
-    }
-    console.log(`Server connected and listening in${port}`);
-    console.log("CONNECTED TO DATABASE");
+    };
 
-})
+    console.log('database.js : Database: "NORMANDA" has been conected! ')
+
+});
+////////////////////CODE FOR CONNECTION TO DATABASE\\\\\\\\\\\\\\\\\\\\\\
+
+//////////VARIABLES\\\\\\\\\\\
+const DefaultPort = 3000;
+//////////VARIABLES\\\\\\\\\\\
+
+//Middleware\\
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//Login\\
+const Login = require("routes","accountServices.js");
+app.use('/login', Login);
+
+
+//Gets\\
+//const GetsRoute = require(path.join(__dirname,"Get", "Gets.js"))
+//app.use('/get', GetsRoute); 
+
+////Request listener\\\\
+app.listen(DefaultPort);

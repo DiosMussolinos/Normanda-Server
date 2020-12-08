@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Server for Normanda Unity Game And Companion App",
   "main": "server.js",
+  
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "ss": "nodemon server.js"
   },
   "author": "Gabriel Vergari & Nuno Teixeira",
   "license": "ISC",
@@ -17,6 +20,8 @@
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.6",
     "path": "^0.12.7",
+    "router": "^1.3.5",
+    "routes": "^2.1.0",
     "shortid": "^2.2.16",
     "socket.io": "^3.0.3"
   }
