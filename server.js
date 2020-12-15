@@ -1,12 +1,16 @@
 //Importing libs\\
-//const http = require('http');
 const http = require('http');
 const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 ////////////////////CODE FOR CONNECTION TO DATABASE\\\\\\\\\\\\\\\\\\\\\\
+//For linux\\
+//const hostname = '127.0.0.1';
+//const port = 3434;
+//For linux\\
 const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
