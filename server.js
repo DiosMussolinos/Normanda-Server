@@ -48,6 +48,15 @@ app.get('/users', function(req, res){
 
 //GET PLAYER INFO - life - level - exp - gold --WORKING 
 app.post('/playerInfo', function(req, res){
+    let sql = `SELECT * FROM player_info WHERE user_id = ` + req.body.user_id +`;`
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+        res.json({results})
+        console.log(results);
+    })
+});
+
+app.post('/playerInfo/life', function(req, res){
     let sql = "SELECT * FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
@@ -55,6 +64,7 @@ app.post('/playerInfo', function(req, res){
         console.log(results);
     })
 });
+
 
 
 ///////////////LOGIN/REGISTER RELATED\\\\\\\\\\\\\\\\\
@@ -103,7 +113,7 @@ app.get("/getWarStore", function(req, res, next){
     })
 })
 
-//GET INVENTORY --TESTAR
+//GET INVENTORY -- WORKING
 app.post('/callInvetory', function(req, res, next){
     let sql = "CALL GetInventory("+ req.body.user_id + ");"
     dbase.query(sql, function(err, results, fields){
@@ -128,8 +138,6 @@ app.post('/buyItem', function(req, res, next){
         })
     })
 });
-
-
 
 // -- Add Assincronos TIMER do app
 // Timer = true Pega Valor do timer e transforma em ms
