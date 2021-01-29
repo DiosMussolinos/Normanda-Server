@@ -33,8 +33,8 @@ dbase.connect((err)=>{
 app.listen(port, function(){console.log(`Listening at ${port}`)});
 
 
-////////////////////\\\\\\\\\\\\\\\\\\\\\\
-////////////////////GETS\\\\\\\\\\\\\\\\\\\\\\
+
+////////////////////GETS && POSTS\\\\\\\\\\\\\\\\\\\\\\
 
 //GET USERS --WORKING
 app.get('/users', function(req, res){
@@ -66,7 +66,7 @@ app.get('/callInvetory', function(req, res, next){
     })
 });
 
-//BUY -- testar
+//BUY -- TESTAR
 app.post('/buyItem', function(req, res, next){ 
     let sql = `INSERT INTO inventory(user_id, item_id, item_amount) VALUES (?);`;
     let values = [
