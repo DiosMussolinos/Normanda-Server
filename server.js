@@ -35,7 +35,7 @@ app.listen(port, function(){console.log(`Listening at ${port}`)});
 
 
 ////////////////////GETS && POSTS\\\\\\\\\\\\\\\\\\\\\\
-
+///////////////USERS RELATED\\\\\\\\\\\\\\\\\
 //GET USERS --WORKING
 app.get('/users', function(req, res){
     let sql = `SELECT * FROM users`;
@@ -46,7 +46,7 @@ app.get('/users', function(req, res){
     })
 });
 
-//GET PLAYER INFO - life - level - exp - gold --TESTAR 
+//GET PLAYER INFO - life - level - exp - gold --WORKING 
 app.post('/playerInfo', function(req, res){
     let sql = "SELECT * FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
@@ -56,45 +56,11 @@ app.post('/playerInfo', function(req, res){
     })
 });
 
-//GET INVENTORY --TESTAR
-app.get('/callInvetory', function(req, res, next){
-    let sql = "CALL GetInventory("+ req.body.user_id + ");"
-    dbase.query(sql, function(err, results, fields){
-        if(err) throw err;
-        res.send(results[0])
-        console.log(results);
-    })
-});
 
-//BUY -- TESTAR
-app.post('/buyItem', function(req, res, next){ 
-    let sql = `INSERT INTO inventory(user_id, item_id, item_amount) VALUES (?);`;
-    let values = [
-        req.body.user_id,
-        req.body.item_id,
-        req.body.item_amount
-    ];
-    dbase.query(sql, [values], function(err, results, fields){
-        if(err) throw err;
-        res.json({
-            message: item_id + " Added"
-        })
-    })
-});
-
-//GET PLAYER INFO - life - level - exp - gold --TESTAR 
-app.post('/playerInfo', function(req, res){
-    let sql = "SELECT * FROM player_info WHERE user_id = " + req.body.user_id +";"
-    dbase.query(sql, function(err, results, fields){
-        if(err) throw err;
-        res.json({results})
-        console.log(results);
-    })
-});
-
+///////////////LOGIN/REGISTER RELATED\\\\\\\\\\\\\\\\\
 //Register\\ -- WORKING
 app.post('/newPlayer', function(req, res){
-    let sql = 'INSERT INTO users(user_name, user_password) VALUES (?);'
+    let sql = "INSERT INTO users(user_name, user_password) VALUES (?);"
     let values = [
         req.body.user_name,
         req.body.user_password
@@ -108,23 +74,61 @@ app.post('/newPlayer', function(req, res){
     })
 });
 
-
 //Login\\ -- WORKING
 app.post('/login', function(req, res){
-    let sql = 'SELECT * FROM users WHERE user_name ="' + req.body.user_name + '" AND user_password = "' + req.body.user_password +'";'
-    let values = [
-        req.body.user_name,
-        req.body.user_password
-    ]
+    let sql = "SELECT * FROM users WHERE user_name =" + req.body.user_name + " AND user_password = " + req.body.user_password + ";"
 
     dbase.query(sql, function(err, data, fields){
         if(err) throw err;
         res.json({
-            message: "loged as "+ values[0] +" with password "+ values[1]
+            message: "loged as "+ req.body.user_name +" with password ***********"
         })
     })
 
 })
+
+
+
+
+///////////////ITEMS RELATED RELATED\\\\\\\\\\\\\\\\\
+//GET WAR STORE
+app.get("/getWarStore", function(req, res, next){
+    let sql = "CALL GetMarket();"
+
+    dbase.query(sql, function(err, data, fields){
+        if(err) throw err;
+        res.json({
+            message: "Market added"
+        })
+    })
+})
+
+//GET INVENTORY --TESTAR
+app.post('/callInvetory', function(req, res, next){
+    let sql = "CALL GetInventory("+ req.body.user_id + ");"
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+        res.send(results[0])
+        console.log(results);
+    })
+});
+
+//BUY -- WORKING
+app.post('/buyItem', function(req, res, next){ 
+    let sql = `INSERT INTO inventory(user_id, item_id, item_amount) VALUES (?);`;
+    let values = [
+        req.body.user_id,
+        req.body.item_id,
+        req.body.item_amount
+    ];
+    dbase.query(sql, [values], function(err, results, fields){
+        if(err) throw err;
+        res.json({
+            message: req.body.item_id + " Added"
+        })
+    })
+});
+
 
 
 // -- Add Assincronos TIMER do app

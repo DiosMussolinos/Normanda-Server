@@ -9,6 +9,8 @@ CREATE TABLE users(
 	user_password     	VARCHAR(255) NOT NULL,
     PRIMARY KEY (user_id)
 );
+#Test Acount
+INSERT INTO users(user_name ,user_password) VALUES ( 'Vergari' , '12345');
 
 CREATE TABLE player_info(
 	user_id 		INT NOT NULL,
@@ -19,6 +21,8 @@ CREATE TABLE player_info(
 	PRIMARY KEY (user_id),
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
+#Test Acount
+INSERT INTO player_info(user_id, user_level, user_exp, user_gold) VALUES (1,12,30,400);
 
 CREATE TABLE war_store(
 	item_id 		VARCHAR(10),
@@ -59,6 +63,12 @@ CREATE TABLE inventory(
     FOREIGN KEY (user_id) REFERENCES player_info(user_id),
     FOREIGN KEY (item_id) REFERENCES war_store(item_id)
 );
+#Test Acount
+INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'OreSwo',2);
+INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'MerShi',1);
+INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'NtiPot',5);
+INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'NtaPot',2);
+
 
 /*Triggers*/
 DELIMITER $$
@@ -230,21 +240,6 @@ END IF;
 
 END$$
 
-/*---------------------------------------------------------------------------------------------------------------------------------*/
-/*CRYPTO THE ACCOUNT --BEST HACKER*/
-CREATE PROCEDURE GetUserHashPass(IN name_inspec VARCHAR(255))
-BEGIN
-
-SELECT 
-	user_password AS "pass", user_id AS "id" 
-FROM 
-	users 
-WHERE 
-	user_name = name_inspec;
-
-END$$
-
-/*---------------------------------------------------------------------------------------------------------------------------------*/
 /*GET WAR MARKET*/
 CREATE PROCEDURE GetMarket()
 BEGIN
