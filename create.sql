@@ -11,6 +11,7 @@ CREATE TABLE users(
 );
 #Test Acount
 INSERT INTO users(user_name ,user_password) VALUES ( 'Vergari' , '12345');
+INSERT INTO users(user_name ,user_password) VALUES ( 'Victor' , 'Torres');
 
 CREATE TABLE player_info(
 	user_id 		INT NOT NULL,
@@ -237,6 +238,18 @@ WHERE
 	inspec_username = user_name AND inspec_password = user_password;
 
 END IF;
+
+END$$
+
+CREATE PROCEDURE GetUserHashPass(IN name_inp VARCHAR(255))
+BEGIN
+
+SELECT 
+	user_password AS "pass", user_id AS "id" 
+FROM 
+	users 
+WHERE 
+	user_name = name_inp;
 
 END$$
 

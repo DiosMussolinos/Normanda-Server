@@ -56,8 +56,9 @@ app.post('/playerInfo', function(req, res){
     })
 });
 
-app.post('/playerInfo/life', function(req, res){
-    let sql = "SELECT * FROM player_info WHERE user_id = " + req.body.user_id +";"
+//Life Points
+app.post('/playerInfoLife', function(req, res){
+    let sql = "SELECT player_info.user_hp FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
         res.json({results})
@@ -65,6 +66,35 @@ app.post('/playerInfo/life', function(req, res){
     })
 });
 
+//Level
+app.post('/playerInfoLife', function(req, res){
+    let sql = "SELECT player_info.user_level FROM player_info WHERE user_id = " + req.body.user_id +";"
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+        res.json({results})
+        console.log(results);
+    })
+});
+
+//Exp
+app.post('/playerInfoLife', function(req, res){
+    let sql = "SELECT player_info.user_exp FROM player_info WHERE user_id = " + req.body.user_id +";"
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+        res.json({results})
+        console.log(results);
+    })
+});
+
+//Gold
+app.post('/playerInfoLife', function(req, res){
+    let sql = "SELECT player_info.user_gold FROM player_info WHERE user_id = " + req.body.user_id +";"
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+        res.json({results})
+        console.log(results);
+    })
+});
 
 
 ///////////////LOGIN/REGISTER RELATED\\\\\\\\\\\\\\\\\
@@ -86,19 +116,25 @@ app.post('/newPlayer', function(req, res){
 
 //Login\\ -- WORKING
 app.post('/login', function(req, res){
-    let sql = "SELECT * FROM users WHERE user_name =" + req.body.user_name + " AND user_password = " + req.body.user_password + ";"
+    let sql = "SELECT * FROM users WHERE user_name ='" + req.body.user_name + "' AND user_password = '" + req.body.user_password + "';"
 
-    dbase.query(sql, function(err, data, fields){
+    dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.json({
-            message: "loged as "+ req.body.user_name +" with password ***********"
-        })
+    
+        if(results.length <= 0)
+        {
+            res.json({
+                message: "Wrong userName or password"
+            })
+        }
+        else
+        {
+            res.json({
+                message: "Logged with id " + results[0].user_id
+            })
+        }
     })
-
 })
-
-
-
 
 ///////////////ITEMS RELATED RELATED\\\\\\\\\\\\\\\\\
 //GET WAR STORE
