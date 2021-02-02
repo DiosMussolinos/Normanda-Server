@@ -14,7 +14,7 @@ INSERT INTO users(user_name ,user_password) VALUES ( 'Vergari' , '12345');
 INSERT INTO users(user_name ,user_password) VALUES ( 'Victor' , 'Torres');
 
 CREATE TABLE player_info(
-	user_id 		INT NOT NULL,
+	user_id 		INT NOT NULL AUTO_INCREMENT,
     user_hp			INT DEFAULT 100,
     user_level 		INT DEFAULT 1,
     user_exp 		INT DEFAULT 0,
@@ -23,7 +23,9 @@ CREATE TABLE player_info(
     FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 #Test Acount
-INSERT INTO player_info(user_id, user_level, user_exp, user_gold) VALUES (1,12,30,400);
+INSERT INTO player_info(user_id, user_hp, user_level, user_exp, user_gold) VALUES (1, 50,12,30,400);
+
+INSERT INTO player_info(user_id) VALUES (user_id);
 
 CREATE TABLE war_store(
 	item_id 		VARCHAR(10),
@@ -74,77 +76,9 @@ INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'NtaPot',2);
 /*Triggers*/
 DELIMITER $$
 
-/*Procedures*/
-/*---------------------------------------------------------------------------------------------------------------------------------*/
-/*LEVEL PROCEDURE*/
-
-CREATE PROCEDURE CheckLevel(IN inspec_user_id INT)
-BEGIN
-
-
-SET @playerLevel = (
-SELECT 
-	user_level
-FROM
-	player_info
-WHERE
-	user_id = inspec_user_id
-);
-
-SET @playerExp = (
-SELECT
-	user_exp
-FROM
-	player_info
-WHERE
-	user_id = inspec_user_id
-);
-
-SET @ReqEXP = 0;
-
-IF @playerLevel = 1 THEN
-
-	SET @ReqEXP = 10 * @playerLevel;
-
-ELSE
-
-	SET @ReqEXP = 10 + (3 * @playerLevel) + (3 * (@playerLevel - 1)); ##FAZER NOVA
-
-END IF;
-
-
-IF @ReqEXP <= @playerExp THEN
-	
-	SELECT @playerLevel + 1 AS "yes";
-	UPDATE player_info SET user_level = user_level + 1 WHERE user_id = inspec_user_id;
-    UPDATE player_info SET user_level = user_level - @ReqEXP WHERE user_id = inspec_user_id;
-    
-    
-ELSE
-
-	SELECT @restaurantLevel AS "no";
-
-END IF;
-
-END$$
-
-/*---------------------------------------------------------------------------------------------------------------------------------*/
-/*GET PLAYER DATA*/
-CREATE PROCEDURE GetPlayerInformation(IN inspec_user_id INT)
-BEGIN
-SELECT
-	p.user_level as 'level', p.user_exp as 'experience', p.user_gold as 'gold' 
-FROM
-	player_info
-WHERE
-	user_id = inspec_user_id;
-    
-END$$
-
-
 /*---------------------------------------------------------------------------------------------------------------------------------*/
 /*NEW ACCOUNT*/
-CREATE PROCEDURE CreateAccount(IN inspec_username VARCHAR(255), IN inspec_email VARCHAR(255), IN inspec_password VARCHAR(255))
+CREATE PROCEDURE CreateAccount(IN inspec_username VARCHAR(255), IN inspec_password VARCHAR(255))
 BEGIN
 
 SET @CheckIfUsernameExists = (
@@ -157,17 +91,6 @@ WHERE
 	user_name = inspec_username
 
 );
-
-		/*SET @CheckIfEmailExists = (
-
-		SELECT
-			COUNT(1)
-		FROM
-			users
-		WHERE
-			user_email = inp_email
-
-		);*/
 
 #First check if username already exists
 IF @CheckIfUsernameExists > 0 THEN
@@ -187,69 +110,10 @@ ELSE
     SELECT 'done' as 'output', user_id as 'id'
     FROM users WHERE user_name = inspec_username;
     
+    INSERT INTO Normanda.player_info(user_hp, user_level, user_exp, user_gold) VALUES (100,1,0,100);
+
+    
 END IF;
-
-END$$
-
-
-/*---------------------------------------------------------------------------------------------------------------------------------*/
-/*LOGIN*/
-CREATE PROCEDURE LoginAccount(IN inspec_username VARCHAR(255), IN inspec_password VARCHAR(255))
-BEGIN
-
-SET @CheckIfUsernameExists = (
-
-SELECT
-	COUNT(1)
-FROM
-	users
-WHERE
-	inspec_username = user_name
-
-);
-
-SET @CheckIfPasswordCorrect = (
-
-SELECT
-	COUNT(1)
-FROM
-	users
-WHERE
-	inspec_username = user_name AND inspec_password = user_password
-
-);
-
-#Check if the user exists
-IF @CheckIfUsernameExists = 0 THEN
-
-SELECT 'Username not found!' AS 'output';
-
-#Check if the password is correct
-ELSEIF @CheckIfPasswordCorrect = 0 THEN
-
-SELECT 'The password is incorrect!' AS 'output';
-
-ELSE
-
-SELECT user_id AS 'output'
-FROM 
-	users
-WHERE
-	inspec_username = user_name AND inspec_password = user_password;
-
-END IF;
-
-END$$
-
-CREATE PROCEDURE GetUserHashPass(IN name_inp VARCHAR(255))
-BEGIN
-
-SELECT 
-	user_password AS "pass", user_id AS "id" 
-FROM 
-	users 
-WHERE 
-	user_name = name_inp;
 
 END$$
 

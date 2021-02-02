@@ -6,6 +6,12 @@ const mysql = require('mysql2');
 
 //////////VARIABLES\\\\\\\\\\\
 const port = 3909;
+
+//Challenge Variable -- Starting Points
+//var Challenge = false;
+//var ChallengeTime = 0;
+//var EnemiesMustKill = 0;
+//var EnemiesKilled = 0;
 //////////VARIABLES\\\\\\\\\\\
 
 app.use(bodyParser.urlencoded({ extended:false}))
@@ -61,57 +67,94 @@ app.post('/playerInfoLife', function(req, res){
     let sql = "SELECT player_info.user_hp FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.json({results})
-        console.log(results);
+        //res.json({results})
+        //console.log(results);
+        res.end(JSON.stringify(results[0].user_hp))
     })
 });
 
 //Level
-app.post('/playerInfoLife', function(req, res){
+app.post('/playerInfoLevel', function(req, res){
     let sql = "SELECT player_info.user_level FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.json({results})
-        console.log(results);
+        //res.json({results})
+        res.end(JSON.stringify(results[0].user_level))
     })
 });
 
 //Exp
-app.post('/playerInfoLife', function(req, res){
+app.post('/playerInfoExp', function(req, res){
     let sql = "SELECT player_info.user_exp FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.json({results})
-        console.log(results);
+        res.end(JSON.stringify(results[0].user_exp))
     })
 });
 
 //Gold
-app.post('/playerInfoLife', function(req, res){
+app.post('/playerInfoGold', function(req, res){
     let sql = "SELECT player_info.user_gold FROM player_info WHERE user_id = " + req.body.user_id +";"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.json({results})
-        console.log(results);
+        res.end(JSON.stringify(results[0].user_gold))
     })
 });
+
+
+///////////////UPDATE INFORMATION - LIFE, GOLD, EXP, LEVEL\\\\\\\\\\\\\\\\\
+app.post('/updateLife', function(req, res){
+    let sql = "UPDATE player_info SET user_hp = "+ req.body.user_hp +" WHERE user_id = " + req.body.user_id + ";"
+ 
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+    })
+});
+
+app.post('/updateLevel', function(req, res){
+    let sql = "UPDATE player_info SET user_level = "+ req.body.user_level +" WHERE user_id = " + req.body.user_id + ";"
+
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+    })
+});
+
+app.post('/updateExp', function(req, res){
+    let sql = "UPDATE player_info SET user_exp = "+ req.body.user_exp +" WHERE user_id = " + req.body.user_id + ";"
+    
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+    })
+});
+
+app.post('/updateGold', function(req, res){
+    let sql = "UPDATE player_info SET user_gold = "+ req.body.user_gold +" WHERE user_id = " + req.body.user_id + ";"
+    
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+    })
+});
+
+///////////////UPDATE INFORMATION - LIFE, GOLD, EXP, LEVEL\\\\\\\\\\\\\\\\\
 
 
 ///////////////LOGIN/REGISTER RELATED\\\\\\\\\\\\\\\\\
 //Register\\ -- WORKING
 app.post('/newPlayer', function(req, res){
-    let sql = "INSERT INTO users(user_name, user_password) VALUES (?);"
+    let sql = "CALL CreateAccount(?);"
     let values = [
         req.body.user_name,
         req.body.user_password
     ];
 
-    dbase.query(sql, [values], function(err, data, fields){
+    dbase.query(sql, [values], function(err, results, fields){
         if(err) throw err;
         res.json({
             message: "New Player Added Successfully"
         })
     })
+
+    
 });
 
 //Login\\ -- WORKING
@@ -129,26 +172,16 @@ app.post('/login', function(req, res){
         }
         else
         {
-            res.json({
-                message: "Logged with id " + results[0].user_id
-            })
+            //res.json({results[0].user_id})
+            //res.end(JSON.stringify(result0[0]));
+            res.end(JSON.stringify(results[0].user_id))
         }
+       
     })
 })
+
 
 ///////////////ITEMS RELATED RELATED\\\\\\\\\\\\\\\\\
-//GET WAR STORE
-app.get("/getWarStore", function(req, res, next){
-    let sql = "CALL GetMarket();"
-
-    dbase.query(sql, function(err, data, fields){
-        if(err) throw err;
-        res.json({
-            message: "Market added"
-        })
-    })
-})
-
 //GET INVENTORY -- WORKING
 app.post('/callInvetory', function(req, res, next){
     let sql = "CALL GetInventory("+ req.body.user_id + ");"
@@ -172,8 +205,28 @@ app.post('/buyItem', function(req, res, next){
         res.json({
             message: req.body.item_id + " Added"
         })
+        res.send({results})
     })
 });
 
+/*
+///////////////CHALLENGE\\\\\\\\\\\\\\\\\
+if(Challenge = true && ChallengeTime > 0)
+{
+    setTimeout(function () {
+        EnemiesMustKill = ChallengeTime * 2;
+    }, ChallengeTime * 1000 * 60);
+
+    if(EnemiesKilled >= EnemiesKilled){
+        //Add EXP HERE
+    }
+}
+else
+{
+    Challenge = false;
+    ChallengeTime = 0;
+    EnemiesKilled = 0;
+}
+*/
 // -- Add Assincronos TIMER do app
 // Timer = true Pega Valor do timer e transforma em ms
