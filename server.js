@@ -48,7 +48,6 @@ app.get('/users', function(req, res){
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
         res.json({results})
-        console.log(results);
     })
 });
 
@@ -166,29 +165,51 @@ app.post('/login', function(req, res){
     
         if(results.length <= 0)
         {
-            res.json({
-                message: "Wrong userName or password"
-            })
+            res.send(null);
+            res.send({message: "Senha errada"})
         }
         else
         {
-            //res.json({results[0].user_id})
-            //res.end(JSON.stringify(result0[0]));
-            res.end(JSON.stringify(results[0].user_id))
-        }
-       
+            res.end(JSON.stringify(results[0]))
+        } 
     })
 })
 
+//Login\\ -- WORKING
+app.post('/loginUnity', function(req, res){
+    let sql = "SELECT * FROM users WHERE user_name ='" + req.body.user_name + "' AND user_password = '" + req.body.user_password + "';"
+
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+    
+        if(results.length <= 0)
+        {
+            res.send(null);
+            res.send({message: "Senha errada"})
+        }
+        else
+        {
+            res.end(JSON.stringify(results[0].user_id))
+        } 
+    })
+})
+///////////////LOGIN/REGISTER RELATED\\\\\\\\\\\\\\\\\
 
 ///////////////ITEMS RELATED RELATED\\\\\\\\\\\\\\\\\
 //GET INVENTORY -- WORKING
-app.post('/callInvetory', function(req, res, next){
+app.post('/callItemId', function(req, res, next){
     let sql = "CALL GetInventory("+ req.body.user_id + ");"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.send(results[0])
-        console.log(results);
+        res.end(JSON.stringify(results.item_id))
+    })
+});
+
+app.post('/callItemAmount', function(req, res, next){
+    let sql = "CALL GetInventory("+ req.body.user_id + ");"
+    dbase.query(sql, function(err, results, fields){
+        if(err) throw err;
+        res.end(JSON.stringify(results.item_amount))
     })
 });
 
