@@ -16,4 +16,6 @@ SELECT * FROM player_info WHERE user_id = 1;
 #REPLACE INTO player_info(user_hp) VALUES(25)  user_id = 1;
 INSERT INTO player_info(user_hp) VALUES (25);
 
-UPDATE player_info SET user_exp = 75 WHERE user_id = 1;
+UPDATE player_info SET user_gold = 100 WHERE user_id = 1;
+
+SELECT * FROM users WHERE user_name = "Vergari"  AND user_password = "123456";

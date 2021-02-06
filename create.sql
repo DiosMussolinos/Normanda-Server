@@ -67,11 +67,7 @@ CREATE TABLE inventory(
     FOREIGN KEY (item_id) REFERENCES war_store(item_id)
 );
 #Test Acount
-INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'OreSwo',2);
-INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'MerShi',1);
-INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'NtiPot',5);
-INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'NtaPot',2);
-
+INSERT INTO inventory(user_id, item_id, item_amount) VALUES (1,'MapN2',1);
 
 /*Triggers*/
 DELIMITER $$

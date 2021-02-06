@@ -8,10 +8,10 @@ const mysql = require('mysql2');
 const port = 3909;
 
 //Challenge Variable -- Starting Points
-//var Challenge = false;
-//var ChallengeTime = 0;
-//var EnemiesMustKill = 0;
-//var EnemiesKilled = 0;
+var Challenge = false;
+var ChallengeTime = 0;
+var EnemiesMustKill = 0;
+var EnemiesKilled = 0;
 //////////VARIABLES\\\\\\\\\\\
 
 app.use(bodyParser.urlencoded({ extended:false}))
@@ -53,11 +53,13 @@ app.get('/users', function(req, res){
 
 //GET PLAYER INFO - life - level - exp - gold --WORKING 
 app.post('/playerInfo', function(req, res){
+    console.log(req.body);
     let sql = `SELECT * FROM player_info WHERE user_id = ` + req.body.user_id +`;`
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.json({results})
+        //res.send({results})
         console.log(results);
+        res.end(JSON.stringify(results[0]))
     })
 });
 
@@ -165,7 +167,7 @@ app.post('/login', function(req, res){
     
         if(results.length <= 0)
         {
-            res.send(null);
+            //res.send(null);
             res.send({message: "Senha errada"})
         }
         else
@@ -201,7 +203,9 @@ app.post('/callItemId', function(req, res, next){
     let sql = "CALL GetInventory("+ req.body.user_id + ");"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
-        res.end(JSON.stringify(results.item_id))
+        res.send(results[0].item_id)
+        //res.json({message: "ITEM" + req.body[0].item_id})
+        res.end(JSON.stringify(results[0].item_id))
     })
 });
 
@@ -209,6 +213,7 @@ app.post('/callItemAmount', function(req, res, next){
     let sql = "CALL GetInventory("+ req.body.user_id + ");"
     dbase.query(sql, function(err, results, fields){
         if(err) throw err;
+        res.send(results)
         res.end(JSON.stringify(results.item_amount))
     })
 });
@@ -230,24 +235,54 @@ app.post('/buyItem', function(req, res, next){
     })
 });
 
-/*
+app.post('/ChallengeToTrue', function(req, res, next){
+        Challenge = req.body.Challenge;
+        ChallengeTime = req.body.ChallengeTime;
+        EnemiesMustKill = req.body.EnemiesKilled;
+
+        if(err) throw err;
+        res.json({
+
+            message: ChallengeTime + " minutes to finish"
+        })
+
+})
+
+app.get('/ChallengeAnswer', function (req, res, next){
+        Challenge = req.body.Challenge;
+        ChallengeTime = req.body.ChallengeTime;
+        EnemiesMustKill = req.body.EnemiesKilled;
+        if(err) throw err;
+        res.json({
+
+            message: ChallengeTime + " minutes to finish"
+        })
+})
+
+
+
 ///////////////CHALLENGE\\\\\\\\\\\\\\\\\
 if(Challenge = true && ChallengeTime > 0)
 {
-    setTimeout(function () {
-        EnemiesMustKill = ChallengeTime * 2;
+    EnemiesMustKill = ChallengeTime * 2;
+
+    setTimeout(function () {     
+        if(EnemiesKilled >= EnemiesMustBeKilled){
+            app.post('/ChallengeWin', function(req, res, nest){
+                let sql ="UPDATE player_info SET user_exp = "+ req.body.user_exp +" WHERE user_id = " + req.body.user_id + ";"
+
+                dbase.query(sql, function(err, results, fields){
+                    if(err) throw err;
+                })
+
+            })
+        }
+        
     }, ChallengeTime * 1000 * 60);
 
-    if(EnemiesKilled >= EnemiesKilled){
-        //Add EXP HERE
-    }
 }
 else
 {
     Challenge = false;
-    ChallengeTime = 0;
-    EnemiesKilled = 0;
+    EnemiesMustKill = 0;
 }
-*/
-// -- Add Assincronos TIMER do app
-// Timer = true Pega Valor do timer e transforma em ms
