@@ -255,7 +255,7 @@ app.get('/ChallengeAnswer', function (req, res, next){
         if(err) throw err;
         res.json({
 
-            message: ChallengeTime + " minutes to finish"
+            message: Challenge
         })
 })
 
